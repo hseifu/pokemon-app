@@ -1,8 +1,9 @@
+import { API_URL } from "@/config";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const pokeApi = createApi({
   reducerPath: "pokeApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "https://pokeapi.co/api/v2/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: API_URL }),
   tagTypes: ["Pokemon"],
   endpoints: (builder) => ({
     // Query: Get All Pokemon
@@ -23,20 +24,15 @@ export const pokeApi = createApi({
       query: (pokemon) => ({
         url: "pokemon",
         method: "POST",
-        credentials: "include",
         body: pokemon,
       }),
       invalidatesTags: [{ type: "Pokemon", id: "LIST" }],
     }),
     // Mutation: Update Pokemon
-    updatePokemon: builder.mutation<
-      IPokemon,
-      { name: string; pokemon: Partial<IPokemon> }
-    >({
+    updatePokemon: builder.mutation<IPokemon, { name: string; pokemon: any }>({
       query: ({ name, pokemon }) => ({
         url: `pokemon/${name}`,
         method: "PATCH",
-        credentials: "include",
         body: pokemon,
       }),
       invalidatesTags: (result, _error, { name }) =>
@@ -44,12 +40,12 @@ export const pokeApi = createApi({
           ? [{ type: "Pokemon", id: name }]
           : [{ type: "Pokemon", id: "LIST" }],
     }),
+
     // Mutation: Delete Pokemon
     deletePokemon: builder.mutation<null, string>({
       query: (name) => ({
         url: `pokemon/${name}`,
         method: "DELETE",
-        credentials: "include",
       }),
       invalidatesTags: [{ type: "Pokemon", id: "LIST" }],
     }),

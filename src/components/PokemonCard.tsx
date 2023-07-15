@@ -1,32 +1,23 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  selectPokemon,
-  clearSelectedPokemon,
-} from "@/features/pokemon/pokemonSlice";
+import { useEffect, useState } from "react";
+import { IPokemon } from "@/features/pokemon/pokemonSlice";
 import { useGetPokemonQuery } from "@/features/pokemon/pokemonAPI";
 import Card from "./Card";
-import { RootState } from "@/stores/pokemonStore";
 
 interface PokemonCardProps {
   name: string;
 }
 
 function PokemonCard({ name }: PokemonCardProps) {
-  const dispatch = useDispatch();
-  const selectedPokemon = useSelector(
-    (state: RootState) => state.pokemonSlice.selectedPokemon
-  );
+  const [selectedPokemon, setSelectedPokemon] = useState<IPokemon | null>(null);
   const { data: pokemon, isLoading, isError } = useGetPokemonQuery(name);
 
   useEffect(() => {
     if (pokemon) {
-      dispatch(selectPokemon(pokemon));
+      setSelectedPokemon(pokemon);
     } else {
-      dispatch(clearSelectedPokemon());
+      setSelectedPokemon(null);
     }
-  }, [pokemon, dispatch]);
-
+  }, [pokemon]);
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -36,9 +27,10 @@ function PokemonCard({ name }: PokemonCardProps) {
   }
 
   return (
-    <div>
+    <div className="p-5">
       {selectedPokemon ? (
         <Card
+          id={selectedPokemon.id}
           name={selectedPokemon.name}
           height={selectedPokemon.height}
           weight={selectedPokemon.weight}
