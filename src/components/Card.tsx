@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 interface CardProps {
   id: number;
   name: string;
@@ -12,22 +14,55 @@ interface CardProps {
   moves: string[];
 }
 
-function Card({ name, height, weight, abilities, types, sprites }: CardProps) {
-  const handleAddToFavorites = () => {
-    const existingFavorites = localStorage.getItem("favorites");
+function Card({
+  id,
+  name,
+  height,
+  weight,
+  abilities,
+  types,
+  sprites,
+}: CardProps) {
+  const [isFavorite, setIsFavorite] = useState(false);
 
-    if (existingFavorites) {
-      const favorites = JSON.parse(existingFavorites);
-      favorites.push(name);
-      localStorage.setItem("favorites", JSON.stringify(favorites));
+  useEffect(() => {
+    // Check if the Pokemon is in favorites
+    const favorites = localStorage.getItem("favorites");
+    if (favorites) {
+      const parsedFavorites = JSON.parse(favorites);
+      setIsFavorite(parsedFavorites.includes(name));
+    }
+  }, [name]);
+
+  const handleToggleFavorite = () => {
+    const favorites = localStorage.getItem("favorites");
+    if (favorites) {
+      const parsedFavorites = JSON.parse(favorites);
+      if (parsedFavorites.includes(name)) {
+        // Remove from favorites
+        const updatedFavorites = parsedFavorites.filter(
+          (favorite: string) => favorite !== name
+        );
+        localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+        setIsFavorite(false);
+      } else {
+        // Add to favorites
+        const updatedFavorites = [...parsedFavorites, name];
+        localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+        setIsFavorite(true);
+      }
     } else {
+      // Add to favorites (first time)
       const favorites = [name];
       localStorage.setItem("favorites", JSON.stringify(favorites));
+      setIsFavorite(true);
     }
   };
 
   return (
-    <div className="card card-compact sm:w-48 md:w-72 lg:w-96 bg-base-100 shadow-xl hover:cursor-pointer">
+    <div
+      className={`card card-compact sm:w-48 md:w-72 lg:w-96 bg-base-100 shadow-xl hover:cursor-pointer `}
+    >
       <figure className="flex justify-center items-center h-24">
         <img className="w-1/2" src={sprites.front_default} alt={name} />
       </figure>
@@ -56,12 +91,16 @@ function Card({ name, height, weight, abilities, types, sprites }: CardProps) {
           </ul>
         </div>
         <div className="card-actions flex justify-end">
-          <div className="rating bg-slate-500 p-3 rounded-lg">
+          <div
+            className={`rating bg-slate-500 p-3 rounded-lg `}
+            onClick={handleToggleFavorite}
+          >
             <input
               type="radio"
-              name="rating-4"
-              className="mask mask-star-2 bg-yellow-300"
-              onClick={handleAddToFavorites}
+              name={`rating-${id}`}
+              className={`mask mask-star-2 ${
+                isFavorite ? "bg-yellow-300" : "bg-white"
+              }`}
             />
           </div>
         </div>
