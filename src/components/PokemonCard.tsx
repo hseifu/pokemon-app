@@ -19,7 +19,7 @@ function PokemonCard({ name }: PokemonCardProps) {
     }
   }, [pokemon]);
   if (isLoading) {
-    return <p>Loading...</p>;
+    return;
   }
 
   if (isError) {

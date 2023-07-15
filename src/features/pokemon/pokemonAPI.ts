@@ -19,46 +19,10 @@ export const pokeApi = createApi({
       query: (name) => `pokemon/${name}`,
       providesTags: (_result, _error, name) => [{ type: "Pokemon", id: name }],
     }),
-    // Mutation: Create a Pokemon
-    createPokemon: builder.mutation<IPokemon, Partial<IPokemon>>({
-      query: (pokemon) => ({
-        url: "pokemon",
-        method: "POST",
-        body: pokemon,
-      }),
-      invalidatesTags: [{ type: "Pokemon", id: "LIST" }],
-    }),
-    // Mutation: Update Pokemon
-    updatePokemon: builder.mutation<IPokemon, { name: string; pokemon: any }>({
-      query: ({ name, pokemon }) => ({
-        url: `pokemon/${name}`,
-        method: "PATCH",
-        body: pokemon,
-      }),
-      invalidatesTags: (result, _error, { name }) =>
-        result
-          ? [{ type: "Pokemon", id: name }]
-          : [{ type: "Pokemon", id: "LIST" }],
-    }),
-
-    // Mutation: Delete Pokemon
-    deletePokemon: builder.mutation<null, string>({
-      query: (name) => ({
-        url: `pokemon/${name}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: [{ type: "Pokemon", id: "LIST" }],
-    }),
   }),
 });
 
-export const {
-  useGetPokemonListQuery,
-  useGetPokemonQuery,
-  useCreatePokemonMutation,
-  useUpdatePokemonMutation,
-  useDeletePokemonMutation,
-} = pokeApi;
+export const { useGetPokemonListQuery, useGetPokemonQuery } = pokeApi;
 
 interface IPokemonListResponse {
   count: number;

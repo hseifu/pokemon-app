@@ -1,8 +1,3 @@
-import {
-  useDeletePokemonMutation,
-  useUpdatePokemonMutation,
-} from "@/features/pokemon/pokemonAPI";
-
 interface CardProps {
   id: number;
   name: string;
@@ -17,37 +12,18 @@ interface CardProps {
   moves: string[];
 }
 
-function Card({
-  id,
-  name,
-  height,
-  weight,
-  abilities,
-  types,
-  sprites,
-}: CardProps) {
-  const [updatePokemon, { isLoading: updatePokemonLoading }] =
-    useUpdatePokemonMutation();
-  const [deletePokemon, { isLoading: deletePokemonLoading }] =
-    useDeletePokemonMutation();
+function Card({ name, height, weight, abilities, types, sprites }: CardProps) {
+  const handleAddToFavorites = () => {
+    const existingFavorites = localStorage.getItem("favorites");
 
-  const handleDelete = (name: string) => {
-    if (window.confirm("Are you sure you want to delete this Pokemon?")) {
-      deletePokemon(name);
+    if (existingFavorites) {
+      const favorites = JSON.parse(existingFavorites);
+      favorites.push(name);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+    } else {
+      const favorites = [name];
+      localStorage.setItem("favorites", JSON.stringify(favorites));
     }
-  };
-
-  const handleUpdate = (id: number, updatedData: Partial<CardProps>) => {
-    const updatedPokemon = {
-      id,
-      ...updatedData,
-      abilities: updatedData.abilities?.map((ability) => ({
-        ability: { name: ability, url: "" },
-        is_hidden: false,
-        slot: 0,
-      })),
-    };
-    updatePokemon({ name, pokemon: updatedPokemon });
   };
 
   return (
@@ -80,20 +56,14 @@ function Card({
           </ul>
         </div>
         <div className="card-actions flex justify-end">
-          <button
-            className="btn btn-primary mr-2 hover:bg-slate-800"
-            onClick={() => handleUpdate(id, { name: "Updated Name" })}
-            disabled={updatePokemonLoading}
-          >
-            Update
-          </button>
-          <button
-            className="btn bg-red-700 text-white border-0"
-            onClick={() => handleDelete(name)}
-            disabled={deletePokemonLoading}
-          >
-            Delete
-          </button>
+          <div className="rating bg-slate-500 p-3 rounded-lg">
+            <input
+              type="radio"
+              name="rating-4"
+              className="mask mask-star-2 bg-yellow-300"
+              onClick={handleAddToFavorites}
+            />
+          </div>
         </div>
       </div>
     </div>
