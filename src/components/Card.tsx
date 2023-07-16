@@ -64,7 +64,7 @@ function Card({
       className={`card card-compact sm:w-48 md:w-72 lg:w-96 bg-base-100 shadow-xl hover:cursor-pointer `}
     >
       <figure className="flex justify-center items-center h-24">
-        <img className="w-1/2" src={sprites.front_default} alt={name} />
+        <img className="w-24 h-24" src={sprites.front_default} alt={name} />
       </figure>
       <div className="p-4">
         <h2 className="text-xl font-bold mb-2">{name}</h2>
