@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function Navbar() {
   return (
     <div className="navbar bg-gray-800 backdrop-blur-sm sticky top-0 z-10">
@@ -58,11 +60,14 @@ function Navbar() {
           </ul>
         </div>
       </div>
-      <div className="navbar-center">
+      <Link to={"/"} className="navbar-center">
         <a className="btn btn-ghost normal-case text-xl">Pokemon-App</a>
-      </div>
+      </Link>
       <div className="navbar-end">
-        <button className="flex items-center gap-2 pr-4 btn btn-ghost ">
+        <Link
+          to={"/favorites"}
+          className="flex items-center gap-2 pr-4 btn btn-ghost "
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
@@ -78,7 +83,7 @@ function Navbar() {
             />
           </svg>
           <h3 className="capitalize">Favorites</h3>
-        </button>
+        </Link>
       </div>
     </div>
   );
