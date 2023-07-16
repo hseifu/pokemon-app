@@ -61,7 +61,7 @@ function Card({
 
   return (
     <div
-      className={`card card-compact sm:w-48 md:w-72 lg:w-96 bg-base-100 shadow-xl hover:cursor-pointer `}
+      className={`card card-compact sm:w-48 md:w-72 lg:w-96 bg-slate-900 hover:bg-slate-700 shadow-xl hover:cursor-pointer `}
     >
       <figure className="flex justify-center items-center h-24">
         <img className="w-24 h-24" src={sprites.front_default} alt={name} />
@@ -92,7 +92,9 @@ function Card({
         </div>
         <div className="card-actions flex justify-end">
           <div
-            className={`rating bg-slate-500 p-3 rounded-lg `}
+            className={`rating ${
+              isFavorite ? "bg-slate-800" : "bg-slate-500"
+            } p-3 rounded-lg `}
             onClick={handleToggleFavorite}
           >
             <input

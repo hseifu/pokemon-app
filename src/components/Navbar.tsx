@@ -1,6 +1,6 @@
 function Navbar() {
   return (
-    <div className="navbar bg-base-100 backdrop-blur-sm sticky top-0 z-10">
+    <div className="navbar bg-gray-800 backdrop-blur-sm sticky top-0 z-10">
       <div className="navbar-start">
         {/* Filter */}
 
@@ -66,7 +66,7 @@ function Navbar() {
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
-            fill="none"
+            fill="gold"
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
