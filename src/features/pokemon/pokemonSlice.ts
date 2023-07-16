@@ -1,11 +1,32 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "@/stores/pokemonStore";
+
+interface FilterState {
+  type: string | null;
+}
+
+interface SortState {
+  type: "ascending" | "descending" | null;
+}
 
 interface PokemonState {
   selectedPokemon?: IPokemon | null;
+  filter: FilterState;
+  sort: SortState;
 }
+
+const initialFilterState: FilterState = {
+  type: null,
+};
+
+const initialSortState: SortState = {
+  type: null,
+};
 
 const initialState: PokemonState = {
   selectedPokemon: null,
+  filter: initialFilterState,
+  sort: initialSortState,
 };
 
 export const pokemonSlice = createSlice({
@@ -18,10 +39,37 @@ export const pokemonSlice = createSlice({
     clearSelectedPokemon: (state) => {
       state.selectedPokemon = null;
     },
+    setFilterType: (state, action: PayloadAction<string>) => {
+      state.filter.type = action.payload;
+    },
+    clearFilterType: (state) => {
+      state.filter.type = null;
+    },
+    setSortType: (state, action: PayloadAction<"ascending" | "descending">) => {
+      state.sort.type = action.payload;
+    },
+    clearSortType: (state) => {
+      state.sort.type = null;
+    },
   },
 });
 
-export const { selectPokemon, clearSelectedPokemon } = pokemonSlice.actions;
+export const {
+  selectPokemon,
+  clearSelectedPokemon,
+  setFilterType,
+  clearFilterType,
+  setSortType,
+  clearSortType,
+} = pokemonSlice.actions;
+
+// Selectors to access the state
+export const selectSelectedPokemon = (state: RootState) =>
+  state.pokemonSlice.selectedPokemon;
+export const selectFilterType = (state: RootState) =>
+  state.pokemonSlice.filter.type;
+export const selectSortType = (state: RootState) =>
+  state.pokemonSlice.sort.type;
 
 export default pokemonSlice.reducer;
 

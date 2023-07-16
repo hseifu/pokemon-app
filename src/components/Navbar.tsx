@@ -1,11 +1,35 @@
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {
+  clearFilterType,
+  clearSortType,
+  setFilterType,
+  setSortType,
+} from "@/features/pokemon/pokemonSlice";
 
 function Navbar() {
+  const dispatch = useDispatch();
+
+  const handleFilterType = (type: string) => {
+    dispatch(setFilterType(type));
+  };
+
+  const handleClearFilterType = () => {
+    dispatch(clearFilterType());
+  };
+
+  const handleSortType = (type: "ascending" | "descending" | "none") => {
+    if (type === "none") {
+      dispatch(clearSortType());
+    } else {
+      dispatch(setSortType(type));
+    }
+  };
+
   return (
     <div className="navbar bg-gray-800 backdrop-blur-sm sticky top-0 z-10">
       <div className="navbar-start">
         {/* Filter */}
-
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost btn-circle">
             <svg
@@ -28,13 +52,13 @@ function Navbar() {
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           >
             <li>
-              <a>Normal</a>
+              <a onClick={() => handleFilterType("Normal")}>Normal</a>
             </li>
             <li>
-              <a>Poison</a>
+              <a onClick={() => handleFilterType("Poison")}>Poison</a>
             </li>
             <li>
-              <a>Flying</a>
+              <a onClick={() => handleFilterType("Flying")}>Flying</a>
             </li>
           </ul>
         </div>
@@ -49,13 +73,13 @@ function Navbar() {
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           >
             <li>
-              <a>Ascending</a>
+              <a onClick={() => handleSortType("ascending")}>Ascending</a>
             </li>
             <li>
-              <a>Descending</a>
+              <a onClick={() => handleSortType("descending")}>Descending</a>
             </li>
             <li>
-              <a>none</a>
+              <a onClick={() => handleSortType("none")}>None</a>
             </li>
           </ul>
         </div>

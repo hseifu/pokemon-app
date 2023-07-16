@@ -63,8 +63,12 @@ function Card({
     <div
       className={`card card-compact sm:w-48 md:w-72 lg:w-96 bg-slate-900 hover:bg-slate-700 shadow-xl hover:cursor-pointer `}
     >
-      <figure className="flex justify-center items-center h-24">
-        <img className="w-24 h-24" src={sprites.front_default} alt={name} />
+      <figure className="flex justify-center items-center h-40">
+        <img
+          className="w-auto h-full max-h-full"
+          src={sprites.front_default}
+          alt={name}
+        />
       </figure>
       <div className="p-4">
         <h2 className="text-xl font-bold mb-2">{name}</h2>
