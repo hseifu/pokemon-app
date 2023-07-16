@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
   clearFilterType,
@@ -9,6 +9,7 @@ import {
 
 function Navbar() {
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const handleFilterType = (type: string) => {
     dispatch(setFilterType(type));
@@ -84,13 +85,20 @@ function Navbar() {
           </ul>
         </div>
       </div>
-      <Link to={"/"} className="navbar-center">
+      <Link
+        to={"/"}
+        className={`navbar-center ${
+          location.pathname === "/" ? "active border-b-2" : ""
+        }`}
+      >
         <a className="btn btn-ghost normal-case text-xl">Pokemon-App</a>
       </Link>
       <div className="navbar-end">
         <Link
           to={"/favorites"}
-          className="flex items-center gap-2 pr-4 btn btn-ghost "
+          className={`flex items-center gap-2 pr-4 btn btn-ghost ${
+            location.pathname === "/favorites" ? "active border-b-2" : ""
+          }`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
