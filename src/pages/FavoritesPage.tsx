@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import PokemonCard from "@/components/PokemonCard";
 import Spinner from "@/components/Spinner";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { removeFavorite, setFavorites } from "@/features/pokemon/pokemonSlice";
 
 function Favorites() {
-  const [favorites, setFavorites] = useState([]);
+  const dispatch = useAppDispatch();
+  const favorites = useAppSelector(
+    (state) => state.pokemonSlice.favorites.favorites
+  );
+
   const [showSpinner, setShowSpinner] = useState(true);
 
   useEffect(() => {
@@ -18,9 +24,13 @@ function Favorites() {
     const storedFavorites = localStorage.getItem("favorites");
     if (storedFavorites) {
       const parsedFavorites = JSON.parse(storedFavorites);
-      setFavorites(parsedFavorites);
+      dispatch(setFavorites(parsedFavorites));
     }
-  }, [favorites]);
+  }, [dispatch]);
+
+  const handleRemoveFavorite = (name: string) => {
+    dispatch(removeFavorite(name));
+  };
 
   if (showSpinner) {
     return <Spinner />;
@@ -33,7 +43,10 @@ function Favorites() {
         {favorites.length ? (
           favorites.map((name, index) => (
             <div key={index} className="flex justify-center">
-              <PokemonCard name={name} />
+              <PokemonCard
+                name={name}
+                onRemoveFavorite={() => handleRemoveFavorite(name)}
+              />
             </div>
           ))
         ) : (

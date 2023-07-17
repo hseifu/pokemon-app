@@ -9,10 +9,15 @@ interface SortState {
   type: "ascending" | "descending" | null;
 }
 
+interface FavoriteState {
+  favorites: string[];
+}
+
 interface PokemonState {
   selectedPokemon?: IPokemon | null;
   filter: FilterState;
   sort: SortState;
+  favorites: FavoriteState;
 }
 
 const initialFilterState: FilterState = {
@@ -23,10 +28,15 @@ const initialSortState: SortState = {
   type: null,
 };
 
+const initialFavoritesState: FavoriteState = {
+  favorites: [],
+};
+
 const initialState: PokemonState = {
   selectedPokemon: null,
   filter: initialFilterState,
   sort: initialSortState,
+  favorites: initialFavoritesState,
 };
 
 export const pokemonSlice = createSlice({
@@ -51,6 +61,26 @@ export const pokemonSlice = createSlice({
     clearSortType: (state) => {
       state.sort.type = null;
     },
+    setFavorites: (state, action: PayloadAction<string[]>) => {
+      state.favorites.favorites = action.payload;
+    },
+    getFavorites: (state) => {
+      state.favorites.favorites;
+    },
+    addToFavorite: (state, action: PayloadAction<string>) => {
+      state.favorites.favorites = [
+        ...state.favorites.favorites,
+        action.payload,
+      ];
+    },
+    removeFavorite: (state, action: PayloadAction<string>) => {
+      state.favorites.favorites = state.favorites.favorites.filter(
+        (favorite) => favorite !== action.payload
+      );
+    },
+    clearFavorites: (state) => {
+      state.favorites.favorites = [];
+    },
   },
 });
 
@@ -61,6 +91,11 @@ export const {
   clearFilterType,
   setSortType,
   clearSortType,
+  setFavorites,
+  getFavorites,
+  addToFavorite,
+  removeFavorite,
+  clearFavorites,
 } = pokemonSlice.actions;
 
 // Selectors to access the state

@@ -5,9 +5,10 @@ import Card from "./Card";
 
 interface PokemonCardProps {
   name: string;
+  onRemoveFavorite?: () => void;
 }
 
-function PokemonCard({ name }: PokemonCardProps) {
+function PokemonCard({ name, onRemoveFavorite }: PokemonCardProps) {
   const [selectedPokemon, setSelectedPokemon] = useState<IPokemon | null>(null);
   const { data: pokemon, isLoading, isError } = useGetPokemonQuery(name);
 
@@ -26,6 +27,12 @@ function PokemonCard({ name }: PokemonCardProps) {
     return <p>Error occurred while fetching the Pokemon.</p>;
   }
 
+  const handleRemoveFavorite = () => {
+    if (onRemoveFavorite) {
+      onRemoveFavorite();
+    }
+  };
+
   return (
     <div className="p-5">
       {selectedPokemon ? (
@@ -40,6 +47,7 @@ function PokemonCard({ name }: PokemonCardProps) {
           types={selectedPokemon.types.map((type) => type.type.name)}
           sprites={selectedPokemon.sprites}
           moves={selectedPokemon.moves.map((move) => move.move.name)}
+          onRemoveFavorite={handleRemoveFavorite}
         />
       ) : (
         ""

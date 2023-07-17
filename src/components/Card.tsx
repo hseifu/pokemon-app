@@ -1,3 +1,5 @@
+import { addToFavorite, removeFavorite } from "@/features/pokemon/pokemonSlice";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import { useState, useEffect } from "react";
 
 interface CardProps {
@@ -12,6 +14,7 @@ interface CardProps {
     back_default: string;
   };
   moves: string[];
+  onRemoveFavorite?: () => void;
 }
 
 function Card({
@@ -23,32 +26,32 @@ function Card({
   types,
   sprites,
 }: CardProps) {
+  const dispatch = useAppDispatch();
+  const favorites = useAppSelector(
+    (state) => state.pokemonSlice.favorites.favorites
+  );
+
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
-    // Check if the Pokemon is in favorites
-    const favorites = localStorage.getItem("favorites");
-    if (favorites) {
-      const parsedFavorites = JSON.parse(favorites);
-      setIsFavorite(parsedFavorites.includes(name));
-    }
-  }, [name]);
+    setIsFavorite(favorites.includes(name));
+  }, [favorites, name]);
 
   const handleToggleFavorite = () => {
-    const favorites = localStorage.getItem("favorites");
     if (favorites) {
-      const parsedFavorites = JSON.parse(favorites);
-      if (parsedFavorites.includes(name)) {
+      if (favorites.includes(name)) {
         // Remove from favorites
-        const updatedFavorites = parsedFavorites.filter(
+        const updatedFavorites = favorites.filter(
           (favorite: string) => favorite !== name
         );
         localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+        dispatch(removeFavorite(name));
         setIsFavorite(false);
       } else {
         // Add to favorites
-        const updatedFavorites = [...parsedFavorites, name];
+        const updatedFavorites = [...favorites, name];
         localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+        dispatch(addToFavorite(name));
         setIsFavorite(true);
       }
     } else {
