@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
-  clearFilterType,
   clearSortType,
   setFilterType,
   setSortType,
@@ -13,10 +12,6 @@ function Navbar() {
 
   const handleFilterType = (type: string) => {
     dispatch(setFilterType(type));
-  };
-
-  const handleClearFilterType = () => {
-    dispatch(clearFilterType());
   };
 
   const handleSortType = (type: "ascending" | "descending" | "none") => {
